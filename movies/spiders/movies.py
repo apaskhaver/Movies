@@ -23,7 +23,6 @@ class MoviesSpider(scrapy.Spider):
         items = []
 
         for movie in response.xpath("//tbody[@class='celebrity-filmography__tbody']"):
-            if (str(movie.xpath('./a/text()').extract_first()) != "\n"):
                 item = MoviesItem()
                 item.title = movie.xpath('.//tr[@data-title]').extract_first()
                 item.year = movie.xpath('.//tr[@data-year]').extract_first()
