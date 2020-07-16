@@ -27,10 +27,11 @@ class MoviesSpider(scrapy.Spider):
             year = movie.xpath('./td[5]/text()').extract()
             rating = movie.xpath('./td/span/text()').extract()
 
-            # if (rating == "No Score Yet"):
-            #     item['rating'] = rating
-            # else:
-            #     item['rating'] = movie.xpath('.//tr/td/span/span[2]/text()').extract()
+            if (rating != "No Score Yet"):
+                rating = movie.xpath('./td/span/span[2]/text()').extract()
+            else:
+                rating = "No Score Yet"
+
             yield {
                 "title": title,
                 "year": year,
