@@ -20,8 +20,17 @@ class MoviesSpider(scrapy.Spider):
         items = []
 
         for movie in response.xpath("//tbody[@class='celebrity-filmography__tbody']"):
-                item = MoviesItem()
-                item.title = movie.xpath('.//tr[@data-title]').extract_first()
-                item.year = movie.xpath('.//tr[@data-year]').extract_first()
-                item.rating = movie.xpath('.//tr[@data-rating]').extract_first()
-                items.append(item)
+            item = MoviesItem()
+            item['title'] = movie.xpath('.//tr/td[2]/a/text()').extract()
+            item['year'] = movie.xpath('//tr/td[5]/text()').extract()
+            rating = movie.xpath('//tr/td/span/text()').extract()
+
+            if (rating == "No Score Yet"):
+                item['rating'] = rating
+            else:
+                item['rating'] = movie.xpath('.//tr/td/span/span[2]/text()').extract()
+
+            items.append(item)
+
+        for item in items:
+            yield item
