@@ -20,23 +20,28 @@ class MoviesSpider(scrapy.Spider):
         items = []
         item = None
 
-        for movie in response.xpath("//tbody[@class='celebrity-filmography__tbody']"):
-            item = MoviesItem()
-            item['title'] = movie.xpath('.//tr/td[2]/a/text()').extract()
-            item['year'] = movie.xpath('.//tr/td[5]/text()').extract()
-            rating = movie.xpath('.//tr/td/span/text()').extract()
+        for movie in response.xpath("//tbody[@class='celebrity-filmography__tbody']/tr"):
+            # item = MoviesItem()
+            # items.append(item)
+            title = movie.xpath('./td[2]/a/text()').extract()
+            year = movie.xpath('./td[5]/text()').extract()
+            rating = movie.xpath('./td/span/text()').extract()
 
-            if (rating == "No Score Yet"):
-                item['rating'] = rating
-            else:
-                item['rating'] = movie.xpath('.//tr/td/span/span[2]/text()').extract()
+            # if (rating == "No Score Yet"):
+            #     item['rating'] = rating
+            # else:
+            #     item['rating'] = movie.xpath('.//tr/td/span/span[2]/text()').extract()
+            yield {
+                "title": title,
+                "year": year,
+                "rating": rating
+            }
 
-            items.append(item)
 
         #yield items
-        for item in items:
-            yield {
-                "title": item['title'],
-                "year": item['year'],
-                "rating": item['rating']
-            }
+        # for item in items:
+        #     yield {
+        #         "title": item['title'],
+        #         "year": item['year'],
+        #         "rating": item['rating']
+        #     }
