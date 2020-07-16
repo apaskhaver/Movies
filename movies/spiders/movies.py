@@ -18,12 +18,13 @@ class MoviesSpider(scrapy.Spider):
 
     def parse(self, response):
         items = []
+        item = None
 
         for movie in response.xpath("//tbody[@class='celebrity-filmography__tbody']"):
             item = MoviesItem()
             item['title'] = movie.xpath('.//tr/td[2]/a/text()').extract()
-            item['year'] = movie.xpath('//tr/td[5]/text()').extract()
-            rating = movie.xpath('//tr/td/span/text()').extract()
+            item['year'] = movie.xpath('.//tr/td[5]/text()').extract()
+            rating = movie.xpath('.//tr/td/span/text()').extract()
 
             if (rating == "No Score Yet"):
                 item['rating'] = rating
@@ -32,5 +33,10 @@ class MoviesSpider(scrapy.Spider):
 
             items.append(item)
 
+        #yield items
         for item in items:
-            yield item
+            yield {
+                "title": item['title'],
+                "year": item['year'],
+                "rating": item['rating']
+            }
