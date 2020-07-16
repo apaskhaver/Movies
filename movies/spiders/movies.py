@@ -12,9 +12,6 @@ class MoviesSpider(scrapy.Spider):
             'https://www.rottentomatoes.com/celebrity/arnoldschwarzenegger',
         ]
 
-        # for url in urls:
-        #     yield scrapy.Request(url=url, callback=self.parse)
-
     def start_requests(self):
         for url in self.start_urls:
             yield Request(url, dont_filter=False)
@@ -28,9 +25,3 @@ class MoviesSpider(scrapy.Spider):
                 item.year = movie.xpath('.//tr[@data-year]').extract_first()
                 item.rating = movie.xpath('.//tr[@data-rating]').extract_first()
                 items.append(item)
-
-       # next_page_url = response.xpath("//ul[@class='pagination-list']/li[last()]/a/@href").extract_first()
-
-        # if the next page is not empty
-        # go to it
-      #  yield scrapy.Request(response.urljoin(next_page_url))
