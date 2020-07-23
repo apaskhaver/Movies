@@ -23,12 +23,14 @@ class MoviesSpider(scrapy.Spider):
             title = movie.xpath('./td[2]/a/text()').get()
             year = movie.xpath('./td[5]/text()').get()
 
-            if (str(movie.xpath('./td/span[@data-rating]/text()').extract()[0]).contains("\n")):
-                rating = "No ranking"
-            else:
-                rating = movie.xpath('./td/span').extract_first()[0].strip()
+            # if (str(movie.xpath('./td/span[@data-rating]/text()').extract()[0]).contains("\n")):
+            #     rating = "No ranking"
+            # else:
+            rating = movie.xpath('./td/span[@data-rating]/text()').extract_first()[0].strip()
 
-           # if(len(rating) > 5):
+            if (rating == ""):
+                rating = movie.xpath('./td/span[@data-rating]/span[@class="icon__tomatometer-score"]/text()').extract_first()
+            # if(len(rating) > 5):
             #    rating = "No Score Yet"
 
             yield {
