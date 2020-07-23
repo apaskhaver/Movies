@@ -30,6 +30,9 @@ class MoviesSpider(scrapy.Spider):
 
             if (rating == ""):
                 rating = movie.xpath('./td/span[@data-rating]/span[@class="icon__tomatometer-score"]/text()').extract_first()
+
+            if (rating == "N"):
+                rating = "No Score Yet"
             # if(len(rating) > 5):
             #    rating = "No Score Yet"
 
