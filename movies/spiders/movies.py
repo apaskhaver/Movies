@@ -17,20 +17,19 @@ class MoviesSpider(scrapy.Spider):
             yield Request(url, dont_filter=False)
 
     def parse(self, response):
-        items = []
-        item = None
-
         for movie in response.xpath('//div/div[@class="scroll-x"]/table/tbody[@class="celebrity-filmography__tbody"]/tr[@data-year]'):
             # item = MoviesItem()
             # items.append(item)
-            title = movie.xpath('./td[2]/a/text()').extract()
-            year = movie.xpath('./td[5]/text()').extract()
-            rating = movie.xpath('./td/span/text()').extract()
+            title = movie.xpath('./td[2]/a/text()').get()
+            year = movie.xpath('./td[5]/text()').get()
 
-            # if (rating.contains("\n           ")):
-            #     rating = "No Score Yet"
-            #     #rating = movie.xpath('./td/span/span[2]/text()').extract()
+            if (str(movie.xpath('./td/span[@data-rating]/text()').extract()[0]).contains("\n")):
+                rating = "No ranking"
+            else:
+                rating = movie.xpath('./td/span').extract_first()[0].strip()
 
+           # if(len(rating) > 5):
+            #    rating = "No Score Yet"
 
             yield {
                 "title": title,
@@ -38,11 +37,3 @@ class MoviesSpider(scrapy.Spider):
                 "rating": rating
             }
 
-
-        #yield items
-        # for item in items:
-        #     yield {
-        #         "title": item['title'],
-        #         "year": item['year'],
-        #         "rating": item['rating']
-        #     }
