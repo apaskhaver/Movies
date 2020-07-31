@@ -17,11 +17,11 @@ class MoviesSpider(scrapy.Spider):
             yield Request(url, dont_filter=False)
 
     def parse(self, response):
-        # items = []
+        items = []
         for movie in response.xpath('//div/div[@class="scroll-x"]/table/tbody[@class="celebrity-filmography__tbody"]/tr[@data-year]'):
             # item = MoviesItem()
             # items.append(item)
-            
+
             name = movie.xpath('./td[2]/a/text()').get()
             date = movie.xpath('./td[5]/text()').get()
 
@@ -40,7 +40,10 @@ class MoviesSpider(scrapy.Spider):
 
             item = MoviesItem(title = name, year = date, rating = likeability)
 
-            yield item
+            items.append(item)
+
+        for x in items:
+            yield x
             # yield {
             #     'title': title,
             #     'year': year,
