@@ -13,3 +13,4 @@ class MoviesItem(scrapy.Item):
     year = scrapy.Field()
     rating = scrapy.Field()
 
+

@@ -17,28 +17,32 @@ class MoviesSpider(scrapy.Spider):
             yield Request(url, dont_filter=False)
 
     def parse(self, response):
+        # items = []
         for movie in response.xpath('//div/div[@class="scroll-x"]/table/tbody[@class="celebrity-filmography__tbody"]/tr[@data-year]'):
             # item = MoviesItem()
             # items.append(item)
-            title = movie.xpath('./td[2]/a/text()').get()
-            year = movie.xpath('./td[5]/text()').get()
+            
+            name = movie.xpath('./td[2]/a/text()').get()
+            date = movie.xpath('./td[5]/text()').get()
 
             # if (str(movie.xpath('./td/span[@data-rating]/text()').extract()[0]).contains("\n")):
             #     rating = "No ranking"
             # else:
-            rating = movie.xpath('./td/span[@data-rating]/text()').extract_first()[0].strip()
+            likeability = movie.xpath('./td/span[@data-rating]/text()').extract_first()[0].strip()
 
-            if (rating == ""):
-                rating = movie.xpath('./td/span[@data-rating]/span[@class="icon__tomatometer-score"]/text()').extract_first()
+            if (likeability == ""):
+                likeability = movie.xpath('./td/span[@data-rating]/span[@class="icon__tomatometer-score"]/text()').extract_first()
 
-            if (rating == "N"):
-                rating = "No Score Yet"
+            if (likeability == "N"):
+                likeability = "No Score Yet"
             # if(len(rating) > 5):
             #    rating = "No Score Yet"
 
-            yield {
-                "title": title,
-                "year": year,
-                "rating": rating
-            }
+            item = MoviesItem(title = name, year = date, rating = likeability)
 
+            yield item
+            # yield {
+            #     'title': title,
+            #     'year': year,
+            #     'rating': rating
+            # }
