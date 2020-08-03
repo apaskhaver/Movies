@@ -42,6 +42,19 @@ class MoviesSpider(scrapy.Spider):
 
             items.append(item)
 
+        # items.sort(key=items['rating'])
+        # for i in range(0, len(items)):
+        #     print("Running i loop")
+        #     for j in range(0, len(items) - i - 1):
+        #         print("Running j loop")
+        #         if len(items[j]['rating']) <= 3 and len(items[j]['rating']) <= 3:
+        #             if items[j]['rating'] > items[j + 1]['rating']:
+        #                 items[j], items[j + 1] = items[j + 1], items[j]
+        #
+        # print('items' + items)
+     #   items = items.sort(key=items['rating'])
+        items.sort(key=lambda x: x['rating'])
+
         for x in items:
             yield x
             # yield {
