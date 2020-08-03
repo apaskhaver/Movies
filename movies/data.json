@@ -1,6 +1,5 @@
 [
 {"title": "The Villain", "year": "1979", "rating": "0%"},
-{"title": "Terminator 2: Judgment Day 3D", "year": "2017", "rating": "100%"},
 {"title": "The Terminator", "year": "1984", "rating": "100%"},
 {"title": "End of Days", "year": "1999", "rating": "11%"},
 {"title": "Batman & Robin", "year": "1997", "rating": "11%"},
@@ -53,6 +52,7 @@
 {"title": "The Long Goodbye", "year": "1973", "rating": "93%"},
 {"title": "Milius", "year": "2013", "rating": "94%"},
 {"title": "Dave", "year": "1993", "rating": "95%"},
+{"title": "Terminator 2: Judgment Day 3D", "year": "2017", "rating": "100%"},
 {"title": "Bruno Sammartino", "year": "2019", "rating": "No Score Yet"},
 {"title": "Kung Fury", "year": "2019", "rating": "No Score Yet"},
 {"title": "Escape Plan 2 (Double Feature with Escape Plan)", "year": "2018", "rating": "No Score Yet"},

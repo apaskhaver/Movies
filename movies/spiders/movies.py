@@ -55,6 +55,19 @@ class MoviesSpider(scrapy.Spider):
      #   items = items.sort(key=items['rating'])
         items.sort(key=lambda x: x['rating'])
 
+        index = 0
+        for x in range(0, len(items)):
+            if items[x]['rating'] == "No Score Yet":
+                break
+            else:
+                index += 1
+
+        for x in range(0, len(items)):
+            if items[x]['rating'] == "100%":
+                items.insert(index, items[x])
+                items.remove(items[x])
+
+
         for x in items:
             yield x
             # yield {
