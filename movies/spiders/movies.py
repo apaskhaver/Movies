@@ -68,5 +68,10 @@ class MoviesSpider(scrapy.Spider):
         for x in hundreds:
             items.insert(index, x)
 
+        #add percents to number ratings
+        for x in range(0, index + len(hundreds)):
+            items[x]['rating'] = items[x]['rating'] + "%"
+
+        #put items in a json file
         for z in items:
             yield z
