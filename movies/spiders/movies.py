@@ -8,6 +8,7 @@ class MoviesSpider(scrapy.Spider):
     name = "movies"
 
     def __init__(self):
+        #search this URL
         self.start_urls = [
             'https://www.rottentomatoes.com/celebrity/arnoldschwarzenegger',
         ]
@@ -19,61 +20,53 @@ class MoviesSpider(scrapy.Spider):
     def parse(self, response):
         items = []
         for movie in response.xpath('//div/div[@class="scroll-x"]/table/tbody[@class="celebrity-filmography__tbody"]/tr[@data-year]'):
-            # item = MoviesItem()
-            # items.append(item)
 
+            #for every movie, get its name and date
             name = movie.xpath('./td[2]/a/text()').get()
             date = movie.xpath('./td[5]/text()').get()
 
-            # if (str(movie.xpath('./td/span[@data-rating]/text()').extract()[0]).contains("\n")):
-            #     rating = "No ranking"
-            # else:
+            # get its rating
             likeability = movie.xpath('./td/span[@data-rating]/text()').extract_first()[0].strip()
 
+            #if rating is a number, get the number rating
             if (likeability == ""):
                 likeability = movie.xpath('./td/span[@data-rating]/span[@class="icon__tomatometer-score"]/text()').extract_first()
                 likeability = likeability[0:likeability.index("%")]
 
+            #if rating is not a %, set to No Score Yet
             if (likeability == "N"):
                 likeability = "No Score Yet"
-            # if(len(rating) > 5):
-            #    rating = "No Score Yet"
+                rating = "No Score Yet"
 
+
+            #make MoviesItem based on title, year, rating
             item = MoviesItem(title = name, year = date, rating = likeability)
 
+            #add to movies list
             items.append(item)
 
-        # items.sort(key=items['rating'])
-        # for i in range(0, len(items)):
-        #     print("Running i loop")
-        #     for j in range(0, len(items) - i - 1):
-        #         print("Running j loop")
-        #         if len(items[j]['rating']) <= 3 and len(items[j]['rating']) <= 3:
-        #             if items[j]['rating'] > items[j + 1]['rating']:
-        #                 items[j], items[j + 1] = items[j + 1], items[j]
-        #
-        # print('items' + items)
-     #   items = items.sort(key=items['rating'])
+        #sort by "number" with the No Score Yets at the end
         items.sort(key=lambda w: w['rating'])
 
-        index = 0
+        # store 100 ratings
+        hundreds = []
+        for mov in items:
+            if mov['rating'] == "100":
+                hundreds.append(mov)
 
+        #remove all 100s (b/c they're strings, 100 is seen as less than 70, 80, etc b/c 1 < 7, so we
+        #need to fix just 100s
+        items = [mov for mov in items if mov['rating'] != '100']
+
+        #find index of first No Score Yet
         for x in range(0, len(items)):
             if items[x]['rating'] == "No Score Yet":
                 index = x
                 break
 
-        for y in items:
-            if len(y['rating']) == 4:
-                temp = y
-                items.remove(y)
-                items.insert(index - 1, temp)
-
+        #add hundreds back in
+        for x in hundreds:
+            items.insert(index, x)
 
         for z in items:
             yield z
-            # yield {
-            #     'title': title,
-            #     'year': year,
-            #     'rating': rating
-            # }
