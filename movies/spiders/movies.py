@@ -3,7 +3,6 @@ from scrapy import Request
 
 from movies.items import MoviesItem
 
-
 class MoviesSpider(scrapy.Spider):
     name = "movies"
 
@@ -37,7 +36,6 @@ class MoviesSpider(scrapy.Spider):
             if (likeability == "N"):
                 likeability = "No Score Yet"
                 rating = "No Score Yet"
-
 
             #make MoviesItem based on title, year, rating
             item = MoviesItem(title = name, year = date, rating = likeability)
