@@ -32,6 +32,7 @@ class MoviesSpider(scrapy.Spider):
 
             if (likeability == ""):
                 likeability = movie.xpath('./td/span[@data-rating]/span[@class="icon__tomatometer-score"]/text()').extract_first()
+                likeability = likeability[0:likeability.index("%")]
 
             if (likeability == "N"):
                 likeability = "No Score Yet"
@@ -53,23 +54,24 @@ class MoviesSpider(scrapy.Spider):
         #
         # print('items' + items)
      #   items = items.sort(key=items['rating'])
-        items.sort(key=lambda x: x['rating'])
+        items.sort(key=lambda w: w['rating'])
 
         index = 0
+
         for x in range(0, len(items)):
             if items[x]['rating'] == "No Score Yet":
+                index = x
                 break
-            else:
-                index += 1
 
-        for x in range(0, len(items)):
-            if items[x]['rating'] == "100%":
-                items.insert(index, items[x])
-                items.remove(items[x])
+        for y in items:
+            if len(y['rating']) == 4:
+                temp = y
+                items.remove(y)
+                items.insert(index - 1, temp)
 
 
-        for x in items:
-            yield x
+        for z in items:
+            yield z
             # yield {
             #     'title': title,
             #     'year': year,
